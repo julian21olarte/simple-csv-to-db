@@ -30,7 +30,7 @@ public class MapcsvApplication {
     @PostConstruct
     private void runProcess() throws IOException {
         long start = System.currentTimeMillis();
-        String path = new ClassPathResource(FILE_MILLION).getFile().getAbsolutePath();
+        String path = new ClassPathResource(FILE18000).getFile().getAbsolutePath();
         List<Data> data = this.taskProcessor.readFile(path);
         this.taskProcessor.processData(data);
 
