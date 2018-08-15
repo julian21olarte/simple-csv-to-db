@@ -1,12 +1,9 @@
-package com.mapcsv.mapcsv.services.ImplOpenCsvAndHibernate;
+package com.mapcsv.mapcsv.services;
 
 import com.mapcsv.mapcsv.entities.Data;
-import com.mapcsv.mapcsv.repositories.DataRepository;
-import com.mapcsv.mapcsv.services.TaskProcessor;
 import com.opencsv.CSVReader;
 import com.opencsv.bean.ColumnPositionMappingStrategy;
 import com.opencsv.bean.CsvToBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.FileNotFoundException;
@@ -15,13 +12,9 @@ import java.io.IOException;
 import java.util.List;
 
 @Component
-public class TaskProcessorImpl implements TaskProcessor {
+public class CsvReader {
 
-    @Autowired
-    private DataRepository dataRepository;
-
-    @Override
-    public List<Data> readFile(String fileName) throws FileNotFoundException {
+    public List<Data> readFile(String fileName) throws IOException {
         ColumnPositionMappingStrategy strategy = new ColumnPositionMappingStrategy();
         String [] columns = new String [] {"city", "name", "streetAddress", "locality", "addressRegion", "postalCode", "phone", "website"};
 
@@ -31,17 +24,9 @@ public class TaskProcessorImpl implements TaskProcessor {
         FileReader file = new FileReader(fileName);
         System.out.println(fileName);
         CSVReader reader = new CSVReader(file);
-        try {
-            reader.skip(1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        reader.skip(1);
+
         CsvToBean<Data> csvToBean = new CsvToBean<>();
         return csvToBean.parse(strategy, reader);
-    }
-
-    @Override
-    public void processData(List<Data> listData) {
-        this.dataRepository.saveAll(listData);
     }
 }
